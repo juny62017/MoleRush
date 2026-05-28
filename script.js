@@ -7,6 +7,9 @@ document.querySelectorAll(".mole");
 let scoreText =
 document.querySelector(".score");
 
+let bestScoreText =
+document.querySelector(".best-score");
+
 let timerText =
 document.querySelector(".timer");
 
@@ -24,6 +27,8 @@ document.querySelector(".restart-btn");
 
 let score = 0;
 
+let bestScore = 0;
+
 let time = 30;
 
 let gameRunning = false;
@@ -31,6 +36,8 @@ let gameRunning = false;
 let moleInterval;
 
 let timerInterval;
+
+let speed = 900;
 
 function randomMole(){
 
@@ -59,9 +66,19 @@ function randomMole(){
 
 function startGame(){
 
+    clearInterval(
+        moleInterval
+    );
+
+    clearInterval(
+        timerInterval
+    );
+
     score = 0;
 
     time = 30;
+
+    speed = 900;
 
     gameRunning = true;
 
@@ -76,7 +93,7 @@ function startGame(){
     moleInterval =
     setInterval(
         randomMole,
-        900
+        speed
     );
 
     timerInterval =
@@ -117,6 +134,14 @@ function endGame(){
 
     });
 
+    if(score > bestScore){
+
+        bestScore = score;
+
+        bestScoreText.innerText =
+        bestScore;
+    }
+
     finalScore.innerText =
     "Final Score: " + score;
 
@@ -147,6 +172,26 @@ moles.forEach(function(mole){
             mole.classList.remove(
                 "active"
             );
+
+            if(score % 5 === 0){
+
+                clearInterval(
+                    moleInterval
+                );
+
+                speed -= 80;
+
+                if(speed < 350){
+                    speed = 350;
+                }
+
+                moleInterval =
+                setInterval(
+                    randomMole,
+                    speed
+                );
+
+            }
 
         }
 
